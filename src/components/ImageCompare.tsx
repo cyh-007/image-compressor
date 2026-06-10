@@ -95,9 +95,6 @@ export default function ImageCompare({
           className="w-full h-full object-contain"
           draggable={false}
         />
-        <div className="absolute bottom-4 left-4 bg-black/60 text-white px-3 py-1.5 rounded-lg text-sm font-medium backdrop-blur-sm">
-          {beforeLabel}
-        </div>
       </div>
 
       {/* After image (compressed) */}
@@ -111,9 +108,14 @@ export default function ImageCompare({
           className="w-full h-full object-contain"
           draggable={false}
         />
-        <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1.5 rounded-lg text-sm font-medium backdrop-blur-sm">
-          {afterLabel}
-        </div>
+      </div>
+
+      {/* Labels - placed outside the clipped area */}
+      <div className="absolute bottom-4 left-4 bg-black/60 text-white px-3 py-1.5 rounded-lg text-sm font-medium backdrop-blur-sm z-10">
+        {beforeLabel}
+      </div>
+      <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1.5 rounded-lg text-sm font-medium backdrop-blur-sm z-10">
+        {afterLabel}
       </div>
 
       {/* Slider line */}
@@ -138,7 +140,7 @@ export default function ImageCompare({
       </div>
 
       {/* Instructions */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-lg text-xs font-medium backdrop-blur-sm">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-lg text-xs font-medium backdrop-blur-sm z-10">
         拖动滑块对比图片
       </div>
     </div>

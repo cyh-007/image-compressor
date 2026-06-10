@@ -34,8 +34,9 @@ export function formatFileSize(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-export function getCompressionRatio(original: number, compressed: number): string {
-  if (original === 0) return '0%';
+export function getCompressionRatio(original: number, compressed: number | undefined): string {
+  if (!compressed || original === 0) return '-%';
+  if (compressed >= original) return '0%';
   const ratio = ((original - compressed) / original) * 100;
   return ratio.toFixed(1) + '%';
 }
