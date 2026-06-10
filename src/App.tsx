@@ -45,6 +45,20 @@ function App() {
     setImages([]);
   }, [images]);
 
+  const handleClearCompressed = useCallback(() => {
+    setImages(prev => {
+      prev
+        .filter(img => img.status === 'done')
+        .forEach(img => {
+          URL.revokeObjectURL(img.preview);
+          if (img.compressedPreview) {
+            URL.revokeObjectURL(img.compressedPreview);
+          }
+        });
+      return prev.filter(img => img.status !== 'done');
+    });
+  }, []);
+
   const handleCompressAll = useCallback(async () => {
     setIsCompressing(true);
 
@@ -126,10 +140,10 @@ function App() {
     .reduce((sum, img) => sum + (img.compressedSize || 0), 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="w-full max-w-[95vw] mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="bg-blue-500 text-white p-2 rounded-lg">
@@ -157,24 +171,26 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <main className="flex-1 w-full max-w-[95vw] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
           {/* Left: Settings */}
-          <div className="lg:col-span-1">
+          <div className="xl:col-span-1">
             <div className="sticky top-24">
               <SettingsPanel
                 settings={settings}
                 onSettingsChange={setSettings}
                 imageCount={images.filter(img => img.status === 'pending' || img.status === 'error').length}
+                compressedCount={images.filter(img => img.status === 'done').length}
                 onCompressAll={handleCompressAll}
                 onClearAll={handleClearAll}
+                onClearCompressed={handleClearCompressed}
                 isCompressing={isCompressing}
               />
             </div>
           </div>
 
           {/* Right: Upload & Images */}
-          <div className="lg:col-span-3 space-y-6">
+          <div className="xl:col-span-4 space-y-6">
             <ImageUploader onFilesAdded={handleFilesAdded} />
             <ImageList
               images={images}
@@ -187,8 +203,8 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <footer className="bg-white border-t border-gray-200 mt-auto">
+        <div className="w-full max-w-[95vw] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
             <div>
               <h4 className="font-semibold text-gray-800 mb-2">完全免费</h4>

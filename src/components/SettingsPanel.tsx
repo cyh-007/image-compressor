@@ -4,8 +4,10 @@ interface SettingsPanelProps {
   settings: CompressionSettings;
   onSettingsChange: (settings: CompressionSettings) => void;
   imageCount: number;
+  compressedCount: number;
   onCompressAll: () => void;
   onClearAll: () => void;
+  onClearCompressed: () => void;
   isCompressing: boolean;
 }
 
@@ -13,8 +15,10 @@ export default function SettingsPanel({
   settings,
   onSettingsChange,
   imageCount,
+  compressedCount,
   onCompressAll,
   onClearAll,
+  onClearCompressed,
   isCompressing,
 }: SettingsPanelProps) {
   const presets = [
@@ -121,11 +125,11 @@ export default function SettingsPanel({
       </div>
 
       {/* 操作按钮 */}
-      <div className="flex gap-3 pt-4 border-t border-gray-200">
+      <div className="space-y-3 pt-4 border-t border-gray-200">
         <button
           onClick={onCompressAll}
           disabled={imageCount === 0 || isCompressing}
-          className="flex-1 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white font-medium py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white font-medium py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
         >
           {isCompressing ? (
             <>
@@ -144,13 +148,22 @@ export default function SettingsPanel({
             </>
           )}
         </button>
-        <button
-          onClick={onClearAll}
-          disabled={imageCount === 0}
-          className="px-4 py-2.5 border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:bg-gray-100 disabled:text-gray-400 rounded-lg transition-colors"
-        >
-          清空
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={onClearCompressed}
+            disabled={compressedCount === 0}
+            className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-200 disabled:text-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+          >
+            删除已压缩 ({compressedCount})
+          </button>
+          <button
+            onClick={onClearAll}
+            disabled={imageCount + compressedCount === 0}
+            className="flex-1 border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:bg-gray-100 disabled:text-gray-400 rounded-lg transition-colors text-sm py-2"
+          >
+            清空全部
+          </button>
+        </div>
       </div>
     </div>
   );
